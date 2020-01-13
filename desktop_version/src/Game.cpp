@@ -6662,7 +6662,7 @@ void Game::createmenu( std::string t )
     }
     else if (t == "playerworlds")
     {
-        #if defined(__SWITCH__)
+        #if defined(__SWITCH__) || defined(__WIIU__)
             menuoptions[0] = "play a level";
             menuoptionsactive[0] = true;
             menuoptions[1] = "back to menu";
@@ -6784,7 +6784,7 @@ void Game::createmenu( std::string t )
     }
     else if (t == "graphicoptions")
     {
-        #if defined(__SWITCH__)
+        #if defined(__SWITCH__) || defined(__WIIU__)
             menuoptions[0] = "toggle letterbox";
             menuoptionsactive[0] = true;
             menuoptions[1] = "toggle filter";
@@ -7627,6 +7627,10 @@ void Game::deletequick()
         if(remove("sdmc:/switch/VVVVVV/saves/qsave.vvv") != 0) {
             printf("Error deleting file\n");
         }
+    #elif defined(__WIIU__)
+        if(remove("sd:/VVVVVV/saves/qsave.vvv") != 0) {
+            printf("Error deleting file\n");
+        }
     #else
         if(remove("qsave.vvv") != 0) {
             printf("Error deleting file\n");
@@ -7641,6 +7645,10 @@ void Game::deletetele()
 {
     #if defined(__SWITCH__)
         if(remove("sdmc:/switch/VVVVVV/saves/tsave.vvv") != 0) {
+            printf("Error deleting file\n");
+        }
+    #elif defined(__WIIU__)
+        if(remove("sd:/VVVVVV/saves/tsave.vvv") != 0) {
             printf("Error deleting file\n");
         }
     #else

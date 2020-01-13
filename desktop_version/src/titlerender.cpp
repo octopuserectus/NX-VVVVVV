@@ -50,7 +50,7 @@ void titlerender(Graphics& dwgfx, MapClass& map, Game& game, EntityClass& obj, M
 				#endif
 
         dwgfx.Print(5, 175, "[ Press ACTION to Start ]", tr, tg, tb, true);
-        #if defined(__SWITCH__)
+        #if defined(__SWITCH__) || defined(__WIIU__)
             dwgfx.Print(5, 195, "ACTION = A", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
         #else
             dwgfx.Print(5, 195, "ACTION = Space, Z, or V", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
@@ -193,7 +193,7 @@ void titlerender(Graphics& dwgfx, MapClass& map, Game& game, EntityClass& obj, M
         }
         else if (game.currentmenuname == "graphicoptions")
         {
-            #if defined(__SWITCH__)
+            #if defined(__SWITCH__) || defined(__WIIU__)
                 if (game.currentmenuoption == 0)
                 {
                     dwgfx.bigprint( -1, 30, "Toggle Letterbox", tr, tg, tb, true);
@@ -1392,6 +1392,13 @@ void gamecompleterender(Graphics& dwgfx, Game& game, EntityClass& obj, MapClass&
         if (dwgfx.onscreen(y + game.creditposition) == 0)
         {
             dwgfx.Print(40, y + game.creditposition, "Switch Port by", tr, tg, tb);
+            dwgfx.bigprint(60, y + 10 + game.creditposition, "Nichole Mattera", tr, tg, tb);
+        }
+    #elif defined(__WIIU__)
+        y += 40;
+        if (dwgfx.onscreen(y + game.creditposition) == 0)
+        {
+            dwgfx.Print(40, y + game.creditposition, "Wii U Port by", tr, tg, tb);
             dwgfx.bigprint(60, y + 10 + game.creditposition, "Nichole Mattera", tr, tg, tb);
         }
     #endif

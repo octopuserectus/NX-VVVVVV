@@ -55,7 +55,7 @@ void gamecompletelogic(Graphics& dwgfx, Game& game, EntityClass& obj,  MusicClas
     map.tdrawback = true;
 
     game.creditposition--;
-    #if defined(__SWITCH__)
+    #if defined(__SWITCH__) || defined(__WIIU__)
         if (game.creditposition <= -1690)
         {
             game.creditposition = -1690;

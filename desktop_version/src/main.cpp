@@ -1,6 +1,6 @@
 // This file has recieved my blessing. 🙏 - NicholeMattera
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__WIIU__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>
@@ -37,6 +37,10 @@
     #include <switch.h>
 #endif
 
+#if defined(__WIIU__)
+    #include <whb/proc.h>
+#endif
+
 ScriptClass script;
 edentities edentity[3000];
 
@@ -44,6 +48,10 @@ EditorClass ed;
 
 int main(int argc, char * argv[])
 {
+    #if defined(__WIIU__)
+        WHBProcInit();
+    #endif
+
     if (!FILESYSTEM_init(argv[0]))
     {
         return 1;
@@ -56,7 +64,7 @@ int main(int argc, char * argv[])
         SDL_INIT_GAMECONTROLLER
     );
     // Switch doesn't have a cursor.
-    #if !defined(__SWITCH__)
+    #if !defined(__SWITCH__) && !defined(__WIIU__)
         SDL_ShowCursor(SDL_DISABLE);
     #endif
 
@@ -66,7 +74,7 @@ int main(int argc, char * argv[])
     }
 
     // Switch doesn't have Steam.
-    #if !defined(__SWITCH__)
+    #if !defined(__SWITCH__) && !defined(__WIIU__)
         NETWORK_init();
     #endif
 
@@ -185,7 +193,7 @@ int main(int argc, char * argv[])
     }
 
     // Switch doesn't have Steam.
-    #if !defined(__SWITCH__)
+    #if !defined(__SWITCH__) && !defined(__WIIU__)
         //Check to see if you've already unlocked some achievements here from before the update
         if (game.swnbestrank > 0)
         {
@@ -225,6 +233,8 @@ int main(int argc, char * argv[])
     
     #if defined(__SWITCH__)
         while(appletMainLoop() && !game.shouldQuit)
+    #elif defined(__WIIU__)
+        while(WHBProcIsRunning() && !game.shouldQuit)
     #else
         while(!key.quitProgram)
     #endif
@@ -260,7 +270,7 @@ int main(int argc, char * argv[])
 
         key.Poll();
         // Switch stays in fullscreen mode.
-        #if !defined(__SWITCH__)
+        #if !defined(__SWITCH__) && !defined(__WIIU__)
             if (key.toggleFullscreen)
             {
                 if (!gameScreen.isWindowed)
@@ -293,7 +303,7 @@ int main(int argc, char * argv[])
         #endif
 
         // Switch is always in focus.
-        #if defined(__SWITCH__)
+        #if defined(__SWITCH__) || defined(__WIIU__)
             game.infocus = true;
         #else
             game.infocus = key.isActive;
@@ -400,7 +410,7 @@ int main(int argc, char * argv[])
                 break;
         }
 
-        #if !defined(__SWITCH__)
+        #if !defined(__SWITCH__) && !defined(__WIIU__)
             }
         #endif
 
@@ -411,7 +421,7 @@ int main(int argc, char * argv[])
         }
 
         // Switch doesn't have a keyboard or a way to mute in game, or have the window reset.
-        #if !defined(__SWITCH__)
+        #if !defined(__SWITCH__) && !defined(__WIIU__)
             //Mute button
             if (key.isDown(KEYBOARD_m) && game.mutebutton <= 0 && !ed.textentry)
             {
@@ -459,11 +469,15 @@ int main(int argc, char * argv[])
     }
 
     // Switch doesn't have Steam.
-    #if !defined(__SWITCH__)
+    #if !defined(__SWITCH__) && !defined(__WIIU__)
         NETWORK_shutdown();
     #endif
     SDL_Quit();
     FILESYSTEM_deinit();
+
+    #if defined(__WIIU__)
+        WHBProcShutdown();
+    #endif
 
     return 0;
 }

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__WIIU__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>
@@ -19,7 +19,7 @@
 #include <shlobj.h>
 #define mkdir(a, b) CreateDirectory(a, NULL)
 #define VNEEDS_MIGRATION (mkdirResult != 0)
-#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__SWITCH__)
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__SWITCH__) || defined(__WIIU__)
 #include <sys/stat.h>
 #include <limits.h>
 #define VNEEDS_MIGRATION (mkdirResult == 0)
@@ -27,6 +27,10 @@
 #include <unistd.h>
 #include <dirent.h>
 #define MAX_PATH PATH_MAX
+#endif
+
+#if defined(__WIIU__)
+	#include <coreinit/filesystem.h>
 #endif
 
 char saveDir[MAX_PATH];
@@ -41,7 +45,11 @@ int FILESYSTEM_init(char *argvZero)
 	char output[MAX_PATH];
 	int mkdirResult;
 
-	#if !defined(__SWITCH__)
+	#if defined(__WIIU__)
+		FSInit();
+	#endif
+
+	#if !defined(__SWITCH__) && !defined(__WIIU__)
 	    PHYSFS_permitSymbolicLinks(1);
 	#endif
 	PHYSFS_init(argvZero);
@@ -102,6 +110,10 @@ int FILESYSTEM_init(char *argvZero)
 void FILESYSTEM_deinit()
 {
 	PHYSFS_deinit();
+
+	#if defined(__WIIU__)
+		FSShutdown();
+	#endif
 }
 
 char *FILESYSTEM_getUserSaveDirectory()
@@ -168,6 +180,8 @@ void PLATFORM_getOSDirectory(char* output)
 	strcat(output, "\\VVVVVV\\");
 #elif defined(__SWITCH__)
 	strcat(output, "sdmc:/switch/VVVVVV/");
+#elif defined(__WIIU__)
+	strcat(output, "sd:/VVVVVV/");
 #else
 	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
 #endif
@@ -175,7 +189,7 @@ void PLATFORM_getOSDirectory(char* output)
 
 void PLATFORM_migrateSaveData(char* output)
 {
-#if !defined(__SWITCH__)
+#if !defined(__SWITCH__) && !defined(__WIIU__)
 	char oldLocation[MAX_PATH];
 	char newLocation[MAX_PATH];
 	char oldDirectory[MAX_PATH];
@@ -334,7 +348,7 @@ void PLATFORM_migrateSaveData(char* output)
 			PLATFORM_copyFile(oldLocation, newLocation);
 		}
 	} while (FindNextFile(hFind, &findHandle));
-#elif defined(__SWITCH__)
+#elif defined(__SWITCH__) || defined(__WIIU__)
 	/* No Migration needed. */
 #else
 #error See PLATFORM_migrateSaveData

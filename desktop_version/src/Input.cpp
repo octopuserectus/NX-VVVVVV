@@ -397,7 +397,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, MapClass& map, Game& game, Entity
                     game.createmenu("levellist");
                     map.nexttowercolour();
                   }else if(game.currentmenuoption==1){
-                    #if defined(__SWITCH__)
+                    #if defined(__SWITCH__) || defined(__WIIU__)
                         //back
                         music.playef(11, 10);
                         game.createmenu("mainmenu");
@@ -433,7 +433,7 @@ SDL_assert(0 && "Remove open level dir");
                 }
                 else if (game.currentmenuname == "graphicoptions")
                 {
-                    #if defined(__SWITCH__)
+                    #if defined(__SWITCH__) || defined(__WIIU__)
                         if (game.currentmenuoption == 0)
                         {
                             music.playef(11, 10);
@@ -1000,7 +1000,7 @@ SDL_assert(0 && "Remove open level dir");
                         //next page
                         music.playef(11, 10);
 
-                        #if defined(__SWITCH__)
+                        #if defined(__SWITCH__) || defined(__WIIU__)
                             game.createmenu("credits275");
                         #else
                             game.createmenu("credits3");
@@ -2454,7 +2454,7 @@ void gamecompleteinput(KeyPoll& key, Graphics& dwgfx, Game& game, MapClass& map,
     if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip))
     {
         game.creditposition -= 6;
-        #if defined(__SWITCH__)
+        #if defined(__SWITCH__) || defined(__WIIU__)
             if (game.creditposition <= -1690)
             {
                 if(dwgfx.fademode==0)

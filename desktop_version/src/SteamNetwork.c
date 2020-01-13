@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#if !defined(__SWITCH__)
+#if !defined(__SWITCH__) && !defined(__WIIU__)
 	#include <SDL.h>
 
 	/* Steamworks interface versions */
@@ -99,7 +99,7 @@
 
 int NETWORK_init()
 {
-	#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__SWITCH__)
+	#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__SWITCH__) || defined(__WIIU__)
 		return 1;
 	#else
 		intptr_t steamClient;
@@ -170,7 +170,7 @@ int NETWORK_init()
 
 void NETWORK_shutdown()
 {
-	#if !defined(__SWITCH__)
+	#if !defined(__SWITCH__) && !defined(__WIIU__)
 		if (libHandle)
 		{
 			SteamAPI_Shutdown();
@@ -181,7 +181,7 @@ void NETWORK_shutdown()
 
 void NETWORK_update()
 {
-	#if !defined(__SWITCH__)
+	#if !defined(__SWITCH__) && !defined(__WIIU__)
 		if (libHandle)
 		{
 			SteamAPI_RunCallbacks();
@@ -191,7 +191,7 @@ void NETWORK_update()
 
 void NETWORK_unlockAchievement(const char *name)
 {
-	#if !defined(__SWITCH__)
+	#if !defined(__SWITCH__) && !defined(__WIIU__)
 		if (libHandle)
 		{
 			SteamAPI_ISteamUserStats_SetAchievement(
@@ -205,7 +205,7 @@ void NETWORK_unlockAchievement(const char *name)
 
 int32_t NETWORK_getAchievementProgress(const char *name)
 {
-	#if defined(__SWITCH__)
+	#if defined(__SWITCH__) || defined(__WIIU__)
 		return -1;
 	#else
 		int32_t result = -1;
@@ -223,7 +223,7 @@ int32_t NETWORK_getAchievementProgress(const char *name)
 
 void NETWORK_setAchievementProgress(const char *name, int32_t stat)
 {
-	#if !defined(__SWITCH__)
+	#if !defined(__SWITCH__) && !defined(__WIIU__)
 		if (libHandle)
 		{
 			SteamAPI_ISteamUserStats_SetStat(

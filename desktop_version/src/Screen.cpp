@@ -34,7 +34,7 @@ Screen::Screen()
 
 	// Uncomment this next line when you need to debug -flibit
 	// SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "software", SDL_HINT_OVERRIDE);
-	#if defined(__SWITCH__)
+	#if defined(__SWITCH__) || defined(__WIIU__)
 		SDL_CreateWindowAndRenderer(
 			1920,
 			1080,
@@ -101,7 +101,7 @@ Screen::Screen()
 
 void Screen::ResizeScreen(int x , int y)
 {
-	#if defined(__SWITCH__)
+	#if defined(__SWITCH__) || defined(__WIIU__)
 		SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	#else
 		static int resX = 320;

@@ -1,8 +1,6 @@
-// This file has recieved my blessing. 🙏 - NicholeMattera
-
 #pragma once
 
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__WIIU__)
     #include <SDL2/SDL.h>
 #else
     #include <SDL.h>

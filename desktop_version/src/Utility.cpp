@@ -1,5 +1,3 @@
-// This file has recieved my blessing. 🙏 - NicholeMattera
-
 #include "Utility.h"
 
 #include <sstream>
