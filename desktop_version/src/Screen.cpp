@@ -34,10 +34,18 @@ Screen::Screen()
 
 	// Uncomment this next line when you need to debug -flibit
 	// SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "software", SDL_HINT_OVERRIDE);
-	#if defined(__SWITCH__) || defined(__WIIU__)
+	#if defined(__SWITCH__)
 		SDL_CreateWindowAndRenderer(
 			1920,
 			1080,
+			SDL_WINDOW_FULLSCREEN,
+			&m_window,
+			&m_renderer
+		);
+	#elif defined(__WIIU__)
+		SDL_CreateWindowAndRenderer(
+			1280,
+			720,
 			SDL_WINDOW_FULLSCREEN,
 			&m_window,
 			&m_renderer

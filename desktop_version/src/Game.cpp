@@ -7628,7 +7628,7 @@ void Game::deletequick()
             printf("Error deleting file\n");
         }
     #elif defined(__WIIU__)
-        if(remove("fs:/vol/external01/VVVVVV/saves/qsave.vvv") != 0) {
+        if(remove("fs:/vol/external01/wiiu/apps/VVVVVV/saves/qsave.vvv") != 0) {
             printf("Error deleting file\n");
         }
     #else
@@ -7648,7 +7648,7 @@ void Game::deletetele()
             printf("Error deleting file\n");
         }
     #elif defined(__WIIU__)
-        if(remove("fs:/vol/external01/VVVVVV/saves/tsave.vvv") != 0) {
+        if(remove("fs:/vol/external01/wiiu/apps/VVVVVV/saves/tsave.vvv") != 0) {
             printf("Error deleting file\n");
         }
     #else

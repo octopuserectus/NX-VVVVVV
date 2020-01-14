@@ -35,6 +35,7 @@
 
 char saveDir[MAX_PATH];
 char levelDir[MAX_PATH];
+char dataDir[MAX_PATH];
 
 void PLATFORM_getOSDirectory(char* output);
 void PLATFORM_migrateSaveData(char* output);
@@ -44,11 +45,16 @@ int FILESYSTEM_init(char *argvZero)
 {
 	char output[MAX_PATH];
 	int mkdirResult;
+	
+	#if defined(__WIIU__)
+		PHYSFS_init("fs:/vol/external01/wiiu/apps/VVVVVV/");
+	#else
+		PHYSFS_init(argvZero);
+	#endif
 
 	#if !defined(__SWITCH__) && !defined(__WIIU__)
 	    PHYSFS_permitSymbolicLinks(1);
 	#endif
-	PHYSFS_init(argvZero);
 
 	/* Determine the OS user directory */
 	PLATFORM_getOSDirectory(output);
@@ -81,25 +87,33 @@ int FILESYSTEM_init(char *argvZero)
 	}
 
 	/* Mount the stock content last */
-	strcpy(output, PHYSFS_getBaseDir());
-	strcat(output, "data.zip");
-	if (!PHYSFS_mount(output, NULL, 1))
-	{
-		puts("Error: data.zip missing!");
-		puts("You do not have data.zip!");
-		puts("Grab it from your purchased copy of the game,");
-		puts("or get it from the free Make and Play Edition.");
+	#if defined(__WIIU__)
+		strcpy(dataDir, output);
+		strcat(dataDir, "data");
+		strcat(dataDir, PHYSFS_getDirSeparator());
+		PHYSFS_mount(dataDir, NULL, 1);
+	#else
+		strcpy(output, PHYSFS_getBaseDir());
+		strcat(output, "data.zip");
+		if (!PHYSFS_mount(output, NULL, 1))
+		{
+			puts("Error: data.zip missing!");
+			puts("You do not have data.zip!");
+			puts("Grab it from your purchased copy of the game,");
+			puts("or get it from the free Make and Play Edition.");
 
-		SDL_ShowSimpleMessageBox(
-			SDL_MESSAGEBOX_ERROR,
-			"data.zip missing!",
-			"You do not have data.zip!"
-			"\n\nGrab it from your purchased copy of the game,"
-			"\nor get it from the free Make and Play Edition.",
-			NULL
-		);
-		return 0;
-	}
+			SDL_ShowSimpleMessageBox(
+				SDL_MESSAGEBOX_ERROR,
+				"data.zip missing!",
+				"You do not have data.zip!"
+				"\n\nGrab it from your purchased copy of the game,"
+				"\nor get it from the free Make and Play Edition.",
+				NULL
+			);
+			return 0;
+		}
+	#endif
+
 	return 1;
 }
 
@@ -173,7 +187,7 @@ void PLATFORM_getOSDirectory(char* output)
 #elif defined(__SWITCH__)
 	strcat(output, "sdmc:/switch/VVVVVV/");
 #elif defined(__WIIU__)
-	strcat(output, "fs:/vol/external01/VVVVVV/");
+	strcat(output, "fs:/vol/external01/wiiu/apps/VVVVVV/");
 #else
 	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
 #endif

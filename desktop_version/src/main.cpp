@@ -1,5 +1,3 @@
-// This file has recieved my blessing. 🙏 - NicholeMattera
-
 #if defined(__SWITCH__) || defined(__WIIU__)
     #include <SDL2/SDL.h>
 #else
