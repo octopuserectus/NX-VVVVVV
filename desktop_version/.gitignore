@@ -8,5 +8,11 @@ Makefile
 vvvvvv.*
 *.a
 
+# Switch and Wii U Artifacts
+*.rpx
+*.elf
+*.nacp
+*.nro
+
 # Game data
 data.zip

@@ -45,10 +45,6 @@ int FILESYSTEM_init(char *argvZero)
 	char output[MAX_PATH];
 	int mkdirResult;
 
-	#if defined(__WIIU__)
-		FSInit();
-	#endif
-
 	#if !defined(__SWITCH__) && !defined(__WIIU__)
 	    PHYSFS_permitSymbolicLinks(1);
 	#endif
@@ -110,10 +106,6 @@ int FILESYSTEM_init(char *argvZero)
 void FILESYSTEM_deinit()
 {
 	PHYSFS_deinit();
-
-	#if defined(__WIIU__)
-		FSShutdown();
-	#endif
 }
 
 char *FILESYSTEM_getUserSaveDirectory()
@@ -181,7 +173,7 @@ void PLATFORM_getOSDirectory(char* output)
 #elif defined(__SWITCH__)
 	strcat(output, "sdmc:/switch/VVVVVV/");
 #elif defined(__WIIU__)
-	strcat(output, "sd:/VVVVVV/");
+	strcat(output, "fs:/vol/external01/VVVVVV/");
 #else
 	strcpy(output, PHYSFS_getPrefDir("distractionware", "VVVVVV"));
 #endif
